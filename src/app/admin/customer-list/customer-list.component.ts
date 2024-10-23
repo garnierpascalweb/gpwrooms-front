@@ -5,18 +5,16 @@ import { BookService } from 'src/app/shared/book.service';
 import { LoggerService } from 'src/app/shared/logger.service';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  selector: 'app-customer-list',
+  templateUrl: './customer-list.component.html',
+  styleUrls: ['./customer-list.component.scss']
 })
-export class HomeComponent {
-  readonly TAG_NAME = "HomeComponent";
-  year: number = 2023;
+export class CustomerListComponent {
+  readonly TAG_NAME = "CustomerListComponent";
+  books$: Observable<Book[]> = this.bookService.getBooksFromYear(2010); 
 
   constructor(private logger: LoggerService, private bookService : BookService){
     logger.debug(this.TAG_NAME, 'construction');
     //this.books$ = this.bookService
   }
-
-
 }

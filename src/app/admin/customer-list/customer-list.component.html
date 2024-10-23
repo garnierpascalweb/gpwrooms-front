@@ -1,0 +1,16 @@
+<div>
+    <table>
+        <tr>
+            <th>Nom</th>
+            <th>CheckIn</th>
+            <th>CheckOut</th>
+            <th>Price</th>
+        </tr>
+        <tr *ngFor="let book of books$ | async">
+            <td>{{book.name}}</td>
+            <td>{{book.datecheckin}}</td>
+            <td>{{book.datecheckout}}</td>
+            <td>{{book.pricehost}}</td>
+        </tr>
+    </table>
+</div>
