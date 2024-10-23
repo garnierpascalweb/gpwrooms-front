@@ -11,7 +11,7 @@ import { LoggerService } from 'src/app/shared/logger.service';
 })
 export class YearSynthesisGraphComponent implements OnInit {
   readonly TAG_NAME = "YearSynthesisGraphComponent";
-  @Input() year:number;
+  @Input() year:string;
   public barChart: any;
 
   data = [
