@@ -21,6 +21,8 @@
     "useDefineForClassFields": false,
     // https://stackoverflow.com/questions/49699067/property-has-no-initializer-and-is-not-definitely-assigned-in-the-construc
     "strictPropertyInitialization": false,
+    // https://stackoverflow.com/questions/40349987/how-to-suppress-error-ts2533-object-is-possibly-null-or-undefined
+    "strictNullChecks":false,
     "lib": [
       "ES2022",
       "dom"
