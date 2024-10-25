@@ -5,10 +5,10 @@ import { HomeComponent } from './home/home.component';
 import { CustomerListComponent } from './customer-list/customer-list.component';
 import { YearSynthesisGraphComponent } from './year-synthesis-graph/year-synthesis-graph.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatListModule } from '@angular/material/list';
-import { MatIconModule } from '@angular/material/icon';
+import { MaterialModule } from '../material/material.module';
+import { NavComponent } from './nav/nav.component';
+import { YearSynthesisDatasComponent } from './year-synthesis-datas/year-synthesis-datas.component';
+
 
 
 
@@ -17,16 +17,15 @@ import { MatIconModule } from '@angular/material/icon';
   declarations: [
     HomeComponent,
     CustomerListComponent,
-    YearSynthesisGraphComponent
+    YearSynthesisGraphComponent,
+    NavComponent,
+    YearSynthesisDatasComponent
   ],
   imports: [
     CommonModule,
     AdminRoutingModule,
     ReactiveFormsModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    MatListModule,
-    MatIconModule
+    MaterialModule
   ]
 })
 export class AdminModule { }

@@ -1,0 +1,17 @@
+.icon-size {
+    font-size: 50px;
+    height: 50px;
+    width: 50px;
+  }
+
+  .inline-icon {
+    vertical-align: bottom;
+    font-size: 50px !important;
+ }
+
+ .aligned-with-icon{
+    position: absolute;
+    margin-top: 5px;
+    margin-left: 5px; /* optional */
+    font-size: 30px;
+}

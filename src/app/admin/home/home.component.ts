@@ -12,30 +12,25 @@ import { LoggerService } from 'src/app/shared/logger.service';
 })
 export class HomeComponent {
   readonly TAG_NAME = "HomeComponent";
- 
+  //TODO a ameliorer pour rendre dynamuqe et a jarter d'ici   
+  yearsList = ["2024","2023","2022","2021","2020","2019","2018","2017", "2016", "2015", "2014", "2013"]; 
+  books$: Observable<Book[]>;
+
 
   constructor(private logger: LoggerService, private bookService : BookService){
-    logger.debug(this.TAG_NAME, 'construction');
-    //this.books$ = this.bookService
+    logger.debug(this.TAG_NAME, 'construction');    
   }
 
-  @ViewChild('sidenav') sidenav: MatSidenav;
-  isExpanded = true;
-  showSubmenu: boolean = false;
-  isShowing = false;
-  showSubSubMenu: boolean = false;
-
-  mouseenter() {
-    if (!this.isExpanded) {
-      this.isShowing = true;
-    }
+  onChooseYear(inyear:string){
+    this.logger.debug(this.TAG_NAME, 'choix de lannee ' + inyear);      
+    this.books$ = this.bookService.getBooksFromYear(parseInt(inyear));
   }
 
-  mouseleave() {
-    if (!this.isExpanded) {
-      this.isShowing = false;
-    }
+  selectedTabValue(event:any){
+    console.log(event);
+    const inyear = event.tab.textLabel;
+    this.logger.debug(this.TAG_NAME, 'choix de lannee ' + inyear);      
+    this.books$ = this.bookService.getBooksFromYear(parseInt(inyear));    
   }
-
 
 }
