@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormBuilder  } from '@angular/forms';
-import { Observable, combineLatest, map, startWith } from 'rxjs';
+import { GroupedObservable, Observable, combineLatest, from, groupBy, map, mergeMap, of, pluck, reduce, startWith, switchMap, toArray } from 'rxjs';
 import { Book } from 'src/app/shared/book';
 import { BookService } from 'src/app/shared/book.service';
 import { LoggerService } from 'src/app/shared/logger.service';
@@ -11,41 +11,76 @@ import { LoggerService } from 'src/app/shared/logger.service';
   styleUrls: ['./customer-list.component.scss']
 })
 export class CustomerListComponent {
-  readonly TAG_NAME = "CustomerListComponent";
   
-  searchForm = this.formBuilder.group({
-    name:[''],
-    pricehost:['']
-  });
+  readonly TAG_NAME = "CustomerListComponent";
+  @Input() year:number;
+  
 
-  // books$: Observable<Book[]> = this.bookService.getBooksFromYear(2010);
-  books$: Observable<Book[]> = this.getBooks();
+  books$: Observable<Book[]> = this.getBooks(); 
+  booksByMonths$ = this.booksByMonths();
+
 
   constructor(private formBuilder: FormBuilder, private logger: LoggerService, private bookService : BookService){
-    logger.debug(this.TAG_NAME, 'construction');
-    //this.books$ = this.bookService
+    logger.debug(this.TAG_NAME, 'construction');    
   }
 
-  private getBooks(): Observable<Book[]>{
-    const books$ = this.bookService.getBooksFromYear(2010);
-    // debute avec une chaine vide sinon il affiche rien d'emblée (la on dit que la recherche est vide)
-    const searchedName$ = this.searchForm.controls.name.valueChanges.pipe(startWith(''));
-    const searchedMinPrice$ = this.searchForm.controls.pricehost.valueChanges.pipe(startWith(''));
+  private getBooks(): Observable<Book[]>{   
+    const books$ = this.bookService.getBooksFromYear(this.year);
+    return books$;
+  }  
 
-    const search$ = combineLatest([
-      searchedName$,
-      searchedMinPrice$
-    ]);
-    
-    return combineLatest([books$,search$])
-    .pipe(
-      // pour des reservations (books) et un nom recherché (searchedname), filtre la liste des books pour me donner que ceux ou le name ressemble a searchedname
-      map(([books,[searchedname, searchedMinPrice]]) => books.filter(book => {
-        const isNameMatching = book.name.toLowerCase().includes(searchedname.toLowerCase())
-        const isPriceMatching = book.pricehost > searchedMinPrice;
-        return isNameMatching && isPriceMatching;
-      }))
-    )
+
+
+  private booksByMonths() {
+    const books$: Observable<Book[]> = this.getBooks();   
+    return books$.pipe(
+      map((books) => {
+        console.log('arrivage de ' + books.length + ' book');
+        let multi: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        books.map((book) => {
+          const datecheckin = book.datecheckin;
+          const datecheckout = book.datecheckout;
+          const price = parseFloat(book.pricehost);
+          let monthprice = 0;
+          const monthcheckin = parseInt(datecheckin.substring(5, 7));
+          const monthcheckout = parseInt(datecheckout.substring(5, 7));
+          if (monthcheckin === monthcheckout){
+            monthprice = price;
+          } else {
+            const date1: Date = new Date(datecheckin);  
+            const date2: Date = new Date(datecheckout);
+            const diff = Math.abs(date2.getTime() - date1.getTime());
+            const diffDays = Math.ceil(diff / (1000 * 3600 * 24)); 
+            const pricePerDay = price/diffDays;
+            const daysInMonth = new Date(date1.getFullYear(), date1.getMonth()-1, 0).getDate();
+            const daysInCurrentMonth = daysInMonth - date1.getDate();
+            monthprice = pricePerDay * daysInCurrentMonth;
+            console.log(' sejour a cheval du ' + datecheckin + ' au ' + datecheckout + ' soit ' + daysInCurrentMonth + ' jours dans le mois (contient ' + daysInMonth + ' et on part du ' + date1.getDate() + ' ) sur ' + diffDays + ' sur la periode et donc un prix de ' + monthprice + ' au lieu de ' + price);
+          }
+          const tabindex = monthcheckin - 1;
+          const newprice = multi[tabindex] + price;
+          console.log('date ' + datecheckin + ' month ' + monthcheckin + ' donc index ' + tabindex + ' price ' + price + ' newprice ' + newprice);
+          multi[tabindex] = newprice;
+        })
+        console.log('renvoi dun tableau de ' + multi.length);
+        
+        
+        return [
+          { month: 'Janvier', count: multi[0] },
+          { month: 'Fevrier', count: multi[1] },
+          { month: 'Mars', count: multi[2] },
+          { month: 'Avril', count: multi[3] },
+          { month: 'Mai', count: multi[4] },
+          { month: 'Juin', count: multi[5] },
+          { month: 'Juillet', count: multi[6] },
+          { month: 'Aout', count: multi[7] },
+          { month: 'Septembre', count: multi[8] },
+          { month: 'Octobre', count: multi[9] },
+          { month: 'Novembre', count: multi[10] },
+          { month: 'Decembre', count: multi[11] }
+        ];
+        //return multi;
+      })
+    );
   }
-
 }
