@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   { path: 'guest', loadChildren: () => import('./guest/guest.module').then(m => m.GuestModule) },
   { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) },
+  { path: '', loadChildren: () => import('./guest/guest.module').then(m => m.GuestModule) },
   { path: '**', loadChildren: () => import('./shared/shared.module').then(m => m.SharedModule) }
 ];
 

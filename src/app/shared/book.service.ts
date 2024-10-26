@@ -9,7 +9,7 @@ import { Book } from './book';
 export class BookService {
 
   private http = inject(HttpClient);
-  readonly url = 'https://garnierpascalweb.fr/gpwrooms/api/bookapi.php';
+  readonly url = 'nosilverbullet!';
 
   constructor() {
 

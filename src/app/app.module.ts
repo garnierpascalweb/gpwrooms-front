@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material/material.module';
 
+
 @NgModule({
   declarations: [
     AppComponent
@@ -24,6 +25,7 @@ import { MaterialModule } from './material/material.module';
     BrowserAnimationsModule,
     MaterialModule
   ],
+  // providers retouche selon https://stackoverflow.com/questions/71094093/angular-routing-not-working-after-running-ng-build-at-deployment mais ne regle pas le probleme
   providers: [],
   bootstrap: [AppComponent]
 })
